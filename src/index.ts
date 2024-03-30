@@ -3,7 +3,6 @@ import * as express from "express";
 import * as dotenv from "dotenv";
 import { Request, Response } from "express";
 import { userRouter } from "./routes/user.routes";
-import { movieRouter } from "./routes/movie.routes";
 import { errorHandler } from "./middleware/errorHandler";
 import "reflect-metadata";
 
@@ -12,9 +11,8 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(errorHandler);
-const {PORT = 3000} = process.env;
+const {PORT = 8080} = process.env;
 app.use('/auth', userRouter);
-app.use('/api', movieRouter);
 
 app.get("*", (req: Request, res: Response) => {
     res.status(505).json({message: "Bad request"});

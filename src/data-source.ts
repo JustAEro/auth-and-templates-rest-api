@@ -3,7 +3,6 @@ import { DataSource } from "typeorm"
 
 import * as dotenv from "dotenv";
 import { User } from "./entity/User.entity";
-import { Movie } from "./entity/Movies.entity";
 
 dotenv.config();
 
@@ -19,7 +18,7 @@ export const AppDataSource = new DataSource({
 
     synchronize: NODE_ENV === "dev" ? false : false,
     logging: NODE_ENV === "dev" ? true : false,
-    entities: [User, Movie],
+    entities: [User],
     migrations: [__dirname + "/migration/*.ts"],
     subscribers: [],
 })
