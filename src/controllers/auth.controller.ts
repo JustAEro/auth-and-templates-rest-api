@@ -16,6 +16,10 @@ export class AuthController {
       const userRepository = AppDataSource.getRepository(User);
       const user = await userRepository.findOne({ where: { email } });
 
+      if (!user) {
+        return res.status(500).json({ message: "Internal Server Error: user not found" });
+      }
+
       const isPasswordValid = encrypt.comparepassword(user.password, password);
       if (!user || !isPasswordValid) {
         return res.status(404).json({ message: "User not found" });
@@ -29,13 +33,13 @@ export class AuthController {
     }
   }
 
-  static async getProfile(req: Request, res: Response) {
-    if (!req[" currentUser"]) {
+  static async getProfile(req: Request<{}, {}, {currentUser: {id: string}}>, res: Response) {
+    if (!req.body.currentUser) {
       return res.status(401).json({ message: "Unauthorized" });
     }
     const userRepository = AppDataSource.getRepository(User);
     const user = await userRepository.findOne({
-      where: { id: req[" currentUser"].id },
+      where: { id: req.body.currentUser.id },
     });
     return res.status(200).json({ ...user, password: undefined });
   }

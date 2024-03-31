@@ -3,12 +3,14 @@ import { AppDataSource } from "../data-source";
 import { User } from "../entity/User.entity";
 import { encrypt } from "../helpers/encrypt";
 import * as cache from "memory-cache";
+import { CreateUser } from "../dto/user.dto";
 
 export class UserController {
-  static async signup(req: Request, res: Response) {
+  static async signup(req: Request<{},{},CreateUser>, res: Response) {
     const { name, email, password, role } = req.body;
     const encryptedPassword = await encrypt.encryptpass(password);
     const user = new User();
+
     user.name = name;
     user.email = email;
     user.password = encryptedPassword;
@@ -49,6 +51,11 @@ export class UserController {
     const user = await userRepository.findOne({
       where: { id },
     });
+
+    if (!user) {
+      return res.status(500).json({ message: "Internal Server Error: user not found" });
+    }
+
     user.name = name;
     user.email = email;
     await userRepository.save(user);
@@ -61,6 +68,11 @@ export class UserController {
     const user = await userRepository.findOne({
       where: { id },
     });
+
+    if (!user) {
+      return res.status(500).json({ message: "Internal Server Error: user not found" });
+    }
+
     await userRepository.remove(user);
     res.status(200).json({ message: "ok" });
   }
