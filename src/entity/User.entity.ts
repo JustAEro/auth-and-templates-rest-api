@@ -9,23 +9,23 @@ import {
 @Entity({name: "users"})
 export class User {
     @PrimaryGeneratedColumn("uuid")
-    id: string;
+    id!: string;
   
     @Column({ nullable: false })
-    name: string;
+    name!: string;
   
     @Column({ nullable: false })
-    email: string;
+    email!: string;
   
     @Column({ nullable: false })
-    password: string;
+    password!: string;
   
     @Column({ default: "user" })
-    role: string;
+    role!: string;
   
     @CreateDateColumn()
-    createdAt: Date;
+    createdAt!: Date;
   
     @UpdateDateColumn()
-    updatedAt: Date;
+    updatedAt!: Date;
 }
